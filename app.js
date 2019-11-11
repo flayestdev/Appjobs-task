@@ -1,18 +1,22 @@
-class Condidate {
+// Condition statement should all follow this format: 
+// "( ( house || inssurance ) ) && bike" 
+// space between all operands and logical operators
+
+class Candidate {
   constructor(name, fulfilled) {
     this.name = name;
     this.fulfilled = fulfilled;
     this.eligibleCompanies = [];
-    this.nonEligibleCompanies = [];
+    this.notEligibleCompanies = [];
 
-    // check fulfiled and unfulfiled companies at instanciation
+    // check fulfilled and unfulfilled companies at instantiation
     this.checkIfImElgible();
   }
 
-  // get All fulfiled and unfulfild companies and set them to the according properties
+  // get All fulfilled and unfulfilled companies and set them to the according properties
   checkIfImElgible() {
-    this.eligibleCompanies = Company.getAllFulfildCompanies(this);
-    this.nonEligibleCompanies = Company.getAllNotFulfildCompanies(this);
+    this.eligibleCompanies = Company.getAllFulfilledCompanies(this);
+    this.notEligibleCompanies = Company.getAllUnfulfilledCompanies(this);
   }
 }
 
@@ -21,13 +25,15 @@ class Company {
     this.name = name;
     this.condition = condition;
 
+    // add the instantiated company to companies List
     Company.companies.push(this);
   }
 
   static companies = [];
 
-  static checkFulfilment(condidate, company) {
-    //Check if there is no condition
+  static checkFulfilment(candidate, company) {
+
+    //Check if there is no condition and validate the statement
     if (
       typeof company.condition === "string" &&
       company.condition.length === 0
@@ -35,20 +41,20 @@ class Company {
       return true;
     }
 
-    //split the condition to an array
+    // Split the condition to an array
     let builCondition = company.condition.split(" ");
 
-    // map thru the array's condition for true values
+    // map through the array's condition for true values
     builCondition = builCondition.map(el => {
-      for (const condF in condidate.fulfilled) {
-        if (el.includes(condF) && condidate.fulfilled[condF]) {
+      for (const condF in candidate.fulfilled) {
+        if (el.includes(condF) && candidate.fulfilled[condF]) {
           el = true.toString();
         }
       }
       return el;
     });
 
-    // map thru the array's condition for false values
+    // map through the array's condition for false values
     builCondition = builCondition.map(el => {
       if (
         !el.includes("(") &&
@@ -67,27 +73,33 @@ class Company {
     return eval(builCondition.join(" "));
   }
 
-  static getAllFulfildCompanies(condidate) {
-    // Filter all companies and return only companies that the condidate
-    //fulfild their requirements
+  static getAllFulfilledCompanies(candidate) {
+    
+    // Filter all companies and return only companies that the candidate
+    //fulfilled their requirements
     let fulfiedCompanies = this.companies.filter(company => {
-      return this.checkFulfilment(condidate, company) === true;
+      return this.checkFulfilment(candidate, company) === true;
     });
 
     return fulfiedCompanies;
   }
 
-  static getAllNotFulfildCompanies(condidate) {
-    // Filter all companies and return only companies that the condidate
-    // didn't fulfild their requirements
+  static getAllUnfulfilledCompanies(candidate) {
+
+    // Filter all companies and return only companies that the candidate
+    // didn't fulfilled their requirements
     let notFulfiedCompanies = this.companies.filter(company => {
-      return this.checkFulfilment(condidate, company) === false;
+      return this.checkFulfilment(candidate, company) === false;
     });
 
     return notFulfiedCompanies;
   }
 }
 
+
+// Demo
+
+//  instantiated some companies for a Demo purpose
 const compnayA = new Company(
   "Company A",
   "( ( house || inssurance ) ) && bike"
@@ -102,14 +114,18 @@ const companyF = new Company(
 
 const companyJ = new Company("Company J", "");
 
-const ilyes = new Condidate("ilyes", {
+const AppJobs = new Company("App Jobs", "( react && javascript ) && ( git || bash )");
+
+
+// instantiated a candidate
+const ilyes = new Candidate("Ilyes", {
   house: true,
-  bike: false,
+  bike: true,
   sSecurity: true,
-  workPermit: true,
+  workPermit: false,
   house: true
 });
 
-let value;
 
-value = Company.checkFulfilment(ilyes, compnayA);
+// Check the values of "Ilyes" Candidate
+console.log(ilyes);
