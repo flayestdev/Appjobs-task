@@ -47,6 +47,9 @@ class Company {
     // map through the array's condition for true values
     builCondition = builCondition.map(el => {
       for (const condF in candidate.fulfilled) {
+
+        // check if a single requirement match a fulfilled property
+        // of the candidate 
         if (el.includes(condF) && candidate.fulfilled[condF]) {
           el = true.toString();
         }
@@ -77,22 +80,22 @@ class Company {
     
     // Filter all companies and return only companies that the candidate
     //fulfilled their requirements
-    let fulfiedCompanies = this.companies.filter(company => {
+    let fulfilledCompanies = this.companies.filter(company => {
       return this.checkFulfilment(candidate, company) === true;
     });
 
-    return fulfiedCompanies;
+    return fulfilledCompanies;
   }
 
   static getAllUnfulfilledCompanies(candidate) {
 
     // Filter all companies and return only companies that the candidate
     // didn't fulfilled their requirements
-    let notFulfiedCompanies = this.companies.filter(company => {
+    let notFulfilledCompanies = this.companies.filter(company => {
       return this.checkFulfilment(candidate, company) === false;
     });
 
-    return notFulfiedCompanies;
+    return notFulfilledCompanies;
   }
 }
 
